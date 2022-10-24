@@ -2,12 +2,12 @@ const checkAuth = require('../middleware/checkAuth');
 const db = require('../database/db')
 const router = require('express').Router();
 
-router.get('/records', /*checkAuth,*/(req, res) => {
+router.get('/records', checkAuth,(req, res) => {
 
 })
 
 
-router.get('/all/:userid', (req, res) => {
+router.get('/all/:userid', checkAuth,(req, res) => {
     db.getTransactions(req.params.userid, (result) => {
         res.send(result)
     })
@@ -15,7 +15,7 @@ router.get('/all/:userid', (req, res) => {
 })
 
 
-router.post('/', /*checkAuth, */(req, res) => {
+router.post('/', checkAuth,(req, res) => {
     console.log('request received')
     const { userId, name, value } = req.body
     db.insertTransaction({

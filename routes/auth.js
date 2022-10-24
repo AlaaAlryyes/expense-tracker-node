@@ -60,6 +60,7 @@ router.post('/login', [
     }
     database.findUser(email, async (result) => {
         console.log(result)
+        console.log(result['_password'])
         let isMatched = await bcrypt.compare(password, result['_password'])
         if (isMatched) {
             const token = jwt.sign({
@@ -68,14 +69,19 @@ router.post('/login', [
                 {
                     expiresIn: 360000
                 })
+            console.log('logged')
+            console.log(`token:${token}`)
             res.json({ token })
+        } else {
+            res.status(400).json({
+                'erorrs': [
+                    { "msg": "The user does not  exists" }
+                ]
+            })
         }
+
     })
-    res.status(400).json({
-        'erorrs': [
-            { "msg": "The user does not  exists" }
-        ]
-    })
+
 
 })
 
