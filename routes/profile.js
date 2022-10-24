@@ -5,11 +5,9 @@ const router = require('express').Router();
 router.get('/:username', checkAuth, (req, res) => {
     db.getUserId(req.params.username, (result) => {
         if (result) {
-            res.json({
-                'username':result['name'],
-                'income':0,
-                'outcome':0
-            })
+           db.getTransactionsCount(result,(r)=>{
+            res.json(r)
+           })
         } else {
             res.status(400)
         }

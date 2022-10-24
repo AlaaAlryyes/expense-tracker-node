@@ -51,9 +51,23 @@ function getInNum(id, callback) {
     })
 }
 
+function getTransactionsCount(id, callback) {
+
+    let sql = `SELECT COUNT(user_id)  FROM incoming WHERE user_id =${id} UNION ` +
+        `SELECT COUNT(user_id)  FROM outcoming WHERE user_id =${id} `
+    con.query(sql, function (err, result) {
+        if (err) { throw err; }
+        callback({
+            'income': result[0]['COUNT(user_id)'],
+            'outcome': result[1]['COUNT(user_id)']
+        })
+    })
+
+}
+
 function getOutcomingTransactions(id, callback) {
     var sql = `SELECT * FROM outcoming WHERE user_id = ${id}`
- 
+
 }
 function getIncomingTransactions(id, callback) {
     var sql = `SELECT * FROM incoming WHERE user_id = ${id}`
@@ -96,6 +110,7 @@ const findUser = (username, callback) => {
 }
 
 function deleteTransaction(id) {
+    let sql = `DELETE FROM`
 
 }
 
@@ -103,6 +118,8 @@ function deleteTransaction(id) {
 function updateTransaction(rec) {
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 //connection()
 
@@ -126,11 +143,28 @@ function updateTransaction(rec) {
 
 //getTransactions(1)
 
+/*getInNum(1,(result)=>{
+    console.log(result)
+})
+
+getOutNum(1,(result)=>{
+    console.log(result)
+})*/
+
+getTransactionsCount(1, (result) => {
+    console.log(result)
+})
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
     'connection': connection,
     'findUser': findUser,
     'getUserId': getUserId,
     'getTransactions': getTransactions,
     'insertNewUser': insertNewUser,
-    'insertTransaction': insertTransaction
+    'insertTransaction': insertTransaction,
+    'getInNum': getInNum,
+    'getOutNum': getOutNum,
+    'getTransactionsCount': getTransactionsCount
 }
