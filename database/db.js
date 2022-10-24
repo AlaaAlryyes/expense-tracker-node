@@ -15,7 +15,7 @@ const connection = () => {
     });
 }
 
-function insertTransaction(transaction,callback) {
+function insertTransaction(transaction, callback) {
     let date = new Date()
     let time = date.toISOString().slice(0, 19).replace('T', ' ');
     var sql = `INSERT INTO transactions(user_id,name,value,created_at) VALUES(${transaction['userId']},'${transaction['name']}',${transaction['value']},'${time}')`
@@ -26,13 +26,37 @@ function insertTransaction(transaction,callback) {
     })
 }
 
-function getTransactions(id,callback) {
+function getTransactions(id, callback) {
     var sql = `SELECT * FROM transactions WHERE user_id  = ${id}`;
     con.query(sql, function (err, result) {
         if (err) { throw err; }
         console.log("records fetched")
         callback(result)
     })
+}
+
+function getOutNum(id, callback) {
+    var sql = `SELECT COUNT(${id}) FROM outcoming`;
+    con.query(sql, function (err, result) {
+        if (err) { throw err; }
+        callback(result)
+    })
+}
+
+function getInNum(id, callback) {
+    var sql = `SELECT COUNT(${id}) FROM incoming`;
+    con.query(sql, function (err, result) {
+        if (err) { throw err; }
+        callback(result)
+    })
+}
+
+function getOutcomingTransactions(id, callback) {
+    var sql = `SELECT * FROM outcoming WHERE user_id = ${id}`
+ 
+}
+function getIncomingTransactions(id, callback) {
+    var sql = `SELECT * FROM incoming WHERE user_id = ${id}`
 }
 
 function getUserId(email, callback) {

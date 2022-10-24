@@ -3,9 +3,13 @@ const db = require('../database/db')
 const router = require('express').Router();
 
 router.get('/:username', checkAuth, (req, res) => {
-    db.findUser(req.params.username, (result) => {
+    db.getUserId(req.params.username, (result) => {
         if (result) {
-            res.json(result)
+            res.json({
+                'username':result['name'],
+                'income':0,
+                'outcome':0
+            })
         } else {
             res.status(400)
         }
