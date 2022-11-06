@@ -59,7 +59,6 @@ router.post('/login', [
         })
     }
     database.findUser(email, async (result) => {
-        console.log(result)
         console.log(result['_password'])
         let isMatched = await bcrypt.compare(password, result['_password'])
         if (isMatched) {

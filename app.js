@@ -8,6 +8,7 @@ const app = express()
 const port = 3000
 
 db.connection()
+
 app.get('/', (req, res) => {
     res.send('Hello')
 })

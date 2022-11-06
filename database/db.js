@@ -22,12 +22,21 @@ function insertTransaction(transaction, callback) {
     con.query(sql, function (err, result) {
         if (err) { throw err; }
         console.log("new record is inserted")
-        callback()
+        callback(result)
     })
 }
 
 function getTransactions(id, callback) {
     var sql = `SELECT * FROM transactions WHERE user_id  = ${id}`;
+    con.query(sql, function (err, result) {
+        if (err) { throw err; }
+        console.log("records fetched")
+        callback(result)
+    })
+}
+
+function getBalance(id, callback){
+    var sql = `SELECT SUM(value) FROM transactions WHERE user_id  = ${id}`;
     con.query(sql, function (err, result) {
         if (err) { throw err; }
         console.log("records fetched")
@@ -77,7 +86,6 @@ function getUserId(email, callback) {
     var sql = `SELECT id FROM users WHERE email = '${email}'`
     con.query(sql, function (err, result) {
         if (err) { throw err; }
-        console.log("result length:" + result.length)
         if (result.length == 1) {
             callback(result[0]['id'])
         }
@@ -98,14 +106,11 @@ function insertNewUser(user) {
 
 
 const findUser = (username, callback) => {
-    var sql = `SELECT email,_password FROM users WHERE email = '${username}'`
+    var sql = `SELECT * FROM users WHERE email = '${username}'`
     con.query(sql, function (err, result) {
         if (err) { throw err; }
-        console.log("result length:" + result.length)
-        if (result.length == 1) {
-            callback(result[0])
-        }
-
+        console.log(result)
+        callback(result[0])
     })
 }
 
@@ -141,7 +146,9 @@ function updateTransaction(rec) {
 })*/
 
 
-//getTransactions(1)
+/*getTransactions(1,(result)=>{
+    console.log(result);
+})*/
 
 /*getInNum(1,(result)=>{
     console.log(result)
@@ -151,10 +158,15 @@ getOutNum(1,(result)=>{
     console.log(result)
 })*/
 
-getTransactionsCount(1, (result) => {
+/*getTransactionsCount(1, (result) => {
     console.log(result)
 })
+*/
 
+/*connection()
+getBalance(1,(result)=>{
+    console.log(result[0]['SUM(value)']);
+})*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
@@ -166,5 +178,6 @@ module.exports = {
     'insertTransaction': insertTransaction,
     'getInNum': getInNum,
     'getOutNum': getOutNum,
-    'getTransactionsCount': getTransactionsCount
+    'getTransactionsCount': getTransactionsCount,
+    'getBalance':getBalance
 }
